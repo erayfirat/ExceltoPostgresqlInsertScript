@@ -1,6 +1,6 @@
 from openpyxl import Workbook,load_workbook
 
-wb = load_workbook("ERP.xlsx",  read_only=True)
+wb = load_workbook("excelFile.xlsx",  read_only=True)
 
 ws = wb.sheetnames
 file= open("postgres.txt","w+")
@@ -16,19 +16,16 @@ for name in ws:
     for row in range(2,wb[name].max_row+1):
         insertValuesArr=[]
         insertValues=''
-        for column in range(1,wb[name].max_column+1):
-            #print(" | " + str(wb[name].cell(row,column).value) + " | ",end="")
+        for column in range(1,wb[name].max_column+1):       
             if type(wb[name].cell(row,column).value)==str:
                 insertValuesArr.append("'"+wb[name].cell(row,column).value+"'")
             else:
                 insertValuesArr.append(wb[name].cell(row,column).value)
-
-        #print(insertValuesArr)    
-        insertValues=', '.join([str(elem) for elem in insertValuesArr])
-        #listToStr = ' '.join([str(elem) for elem in s])  
+        
+        insertValues=', '.join([str(elem) for elem in insertValuesArr])        
         insertCommand="INSERT INTO "+ name +"("+ columnNames +") VALUES("+insertValues+");"
         file.write(insertCommand+"\n" )
-        #print(insertCommand)
+        
 print("success")
 file.close() 
                 
